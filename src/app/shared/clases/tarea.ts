@@ -12,8 +12,7 @@ export class Tarea {
   usuario_id: String;
 
 
-  constructor( descripcion, estado , fechacreacion, fechaejecucion,   usuario_id: String;
-    ) {
+  constructor( descripcion, estado , fechacreacion, fechaejecucion,   usuario_id ) {
 
 
     this.descripcion = descripcion;

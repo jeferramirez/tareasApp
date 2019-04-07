@@ -5,7 +5,8 @@ import { TAREA } from '../../shared/interfaces/tarea.interface';
 import { MatTableDataSource } from '@angular/material/table';
 import { UsuariosService } from '../../shared/services/usuarios.service';
 import { Tarea } from '../../shared/clases/tarea';
-
+import { TareasService } from '../../shared/services/tareas.service';
+import * as moment from 'moment';
 @Component({
   selector: 'app-admin-tareas',
   templateUrl: './admin-tareas.component.html',
@@ -13,7 +14,7 @@ import { Tarea } from '../../shared/clases/tarea';
 })
 export class AdminTareasComponent implements OnInit, AfterContentInit {
 
-  columnas = ['nombre', 'apellido', 'email', 'estado' , 'fechacreacion', ];
+  columnas = ['usuario', 'fechacreacion', 'fechaejecucion'  ];
   dataSource = new MatTableDataSource([]);
 
   @ViewChild('paginatorUser') paginatorUser: MatPaginator;
@@ -22,9 +23,13 @@ export class AdminTareasComponent implements OnInit, AfterContentInit {
   tareaTable: TAREA = null;
   newtarea = false;
 
-  constructor(private  _usuarioService: UsuariosService) { }
+  users = [ {nombre: 'juan', id: '2'}, {nombre: 'carlos', id: '3'}];
+
+  constructor(private  _usuarioService: UsuariosService, private _tareaService: TareasService) { }
 
   ngOnInit() {
+
+    this.dataSource.data = this._tareaService.getAll();
   }
 
   ngAfterContentInit() {
@@ -51,38 +56,38 @@ export class AdminTareasComponent implements OnInit, AfterContentInit {
  *  trae una fila de la tabla
  * @param row
  */
-  consultarUser(row) {
+  consultarTarea(row) {
 
     console.log(row);
     this.newtarea = false;
     this.tareaTable = row;
-    this._usuarioService.centerView('consultaruser');
+    this._usuarioService.centerView('consultarTarea');
 
   }
 
   /**
-   * este metodo crea una instancia vacia de un usuario
+   * este metodo crea una instancia vacia de una tarea
    */
-  newUser() {
+  newTarea() {
 
-   this.tareaTable = new Tarea( '' , '' , '' , true, '');
+   this.tareaTable = new Tarea( '' , true, moment().format('L') , '' , '');
    this.newtarea = true;
-   this._usuarioService.centerView('consultaruser');
+   this._usuarioService.centerView('consultarTarea');
   }
 
-  addUser() {
+  addTarea() {
 
    this.dataSource.data.push( this.tareaTable );
   }
 
-  updatedUser() {
+  updatedTarea() {
 
   console.log( this.tareaTable );
 
   }
 
 
-  deletedUser() {
+  deletedTarea() {
 
     console.log( this.tareaTable );
   }

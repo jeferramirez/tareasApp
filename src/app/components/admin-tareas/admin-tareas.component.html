@@ -6,8 +6,8 @@
       <div class="card">
         <div class="card-header">
           <h5 class="text-header">Gestionar tareas</h5>
-          <button class="button" mat-button (click) = "newUser()" >
-            <mat-icon>person_add</mat-icon>
+          <button class="button" mat-button (click) = "newTarea()" >
+            <mat-icon>note_add</mat-icon>
 
           </button>
         </div>
@@ -17,44 +17,39 @@
             <div class="example-container mat-elevation-z8">
                 <div class="example-header">
                   <mat-form-field>
-                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar usuario">
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar tarea">
                   </mat-form-field>
                 </div>
 
                 <mat-table  [dataSource]="dataSource" #sortUser="matSort" matSort matSortDisableClear>
 
-                  <!-- nombre Column -->
-                  <ng-container matColumnDef="nombre">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                  <!-- usuario Column -->
+                  <ng-container matColumnDef="usuario">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Usuario </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.usuario}} </mat-cell>
                   </ng-container>
 
-                  <!-- apellido  Column -->
-                  <ng-container matColumnDef="apellido">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header > Apellido </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.apellido}} </mat-cell>
+                  <!-- fecha c  Column -->
+                  <ng-container matColumnDef="fechacreacion">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header > Fecha creación </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.fechacreacion}} </mat-cell>
                   </ng-container>
 
-                  <!-- email Column -->
-                  <ng-container matColumnDef="email">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                  <!-- fecha e Column -->
+                  <ng-container matColumnDef="fechaejecucion">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha ejecucion </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.fechaejecucion}} </mat-cell>
                   </ng-container>
 
                   <!-- estado Column -->
-                  <ng-container matColumnDef="estado">
+                  <!-- <ng-container matColumnDef="estado">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.estado}} </mat-cell>
-                  </ng-container>
+                  </ng-container> -->
 
-                  <!-- Fecha de creacion Column -->
-                  <ng-container matColumnDef="fechacreacion" >
-                      <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
-                      <mat-cell *matCellDef="let element"> {{element.fechacreacion}} </mat-cell>
-                    </ng-container>
 
                   <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
-                  <mat-row *matRowDef="let row; columns: columnas;"  (click)="consultarUser(row)" class="puntero" ></mat-row>
+                  <mat-row *matRowDef="let row; columns: columnas;"  (click)="consultarTarea(row)" class="puntero" ></mat-row>
                 </mat-table>
 
                 <mat-paginator #paginatorUser="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 15, 25]">
@@ -71,81 +66,85 @@
 
     <div class="col-md-12">
 
-      <div class="card"  *ngIf="usuarioTable" >
+      <div class="card"  *ngIf="tareaTable"  >
 
         <div class="card-header2">
-          <h6> Usuario {{usuarioTable.nombre}} </h6>
+          <h6> Tarea </h6>
         </div>
 
-        <div class="card-body" id="consultaruser">
+        <div class="card-body">
 
 
-         <form class="example-form" #formuser="ngForm" >
+         <form class="example-form" #formTarea= "ngForm" id="consultarTarea" >
 
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="example-full-width">
-                  <input matInput  name="nombre" placeholder="Nombre" (focusout)="prueba(formuser)" [(ngModel)]="usuarioTable.nombre" required>
+                  <textarea matInput  name="descripcion" placeholder="descripcion" [(ngModel)]="tareaTable.descripcion" required>
+                </textarea>
                 </mat-form-field>
               </div>
 
-              <div class="col-md-6">
+              <div class="col-md-6" *ngIf="newtarea">
+                <mat-form-field>
+                    <mat-select placeholder="Usuario" required>
+                      <mat-option *ngFor="let item of users" [value]="item.id">
+                        {{ item.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+              </div>
+
+              <div class="col-md-6" *ngIf="!newtarea">
                   <mat-form-field class="example-full-width">
-                    <input matInput name="apellido"  placeholder="Apellido" [(ngModel)]="usuarioTable.apellido" required>
+                    <input matInput name="usuario"  placeholder="usuario" [(ngModel)]="tareaTable.usuario" >
                   </mat-form-field>
               </div>
             </div>
 
-             <div class="row">
-                <div class="col-md-6">
-                  <mat-form-field class="example-full-width">
-                    <input matInput  name="email" placeholder="Email" [(ngModel)]="usuarioTable.email" required>
-                  </mat-form-field>
-                </div>
+          <div class="row" >
+            <div class="col-md-6" *ngIf="!newtarea" >
+              <mat-form-field class="example-full-width">
+                <input matInput  name="fechacreacion" type="date" placeholder="Fecha de creacion" [(ngModel)]="tareaTable.fechacreacion">
+              </mat-form-field>
+            </div>
 
-                <div class="col-md-6" *ngIf="!newuser">
+            <div class="col-md-6">
+                <mat-form-field class="example-full-width">
+                  <input matInput name="fechaejecucion" type="date" placeholder="Fecha de ejecucion" [(ngModel)]="tareaTable.fechaejecucion" required >
+                </mat-form-field>
+            </div>
+           </div>
 
-                    <mat-slide-toggle [(ngModel)]="usuarioTable.estado"  name="estado">
 
-                        <div *ngIf="usuarioTable.estado">
+
+                <div class="col-md-6" *ngIf="!newtarea">
+
+                    <mat-slide-toggle [(ngModel)]="tareaTable.estado"  name="estado">
+
+                        <div *ngIf="tareaTable.estado">
                             Activo
                         </div>
-                        <div *ngIf="!usuarioTable.estado">
+                        <div *ngIf="!tareaTable.estado">
                             Inactivo
                         </div>
                     </mat-slide-toggle>
 
                 </div>
-              </div>
 
 
-              <div class="col-md-auto" *ngIf="!newuser">
-
-                  <mat-accordion>
-                      <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                          <mat-panel-title>
-                            Tareas programadas
-                          </mat-panel-title>
-                          <mat-panel-description>
-                            Lista de taras
-                          </mat-panel-description>
-                        </mat-expansion-panel-header>
 
 
-                      </mat-expansion-panel>
-                    </mat-accordion>
 
-              </div>
-
-
-               <button class="button margin" mat-button  *ngIf="newuser && formuser.valid" (click) = "addUser()" >
+               <button class="button margin" mat-button  *ngIf="newtarea && formTarea.valid" (click) = "addTarea()" >
                   <mat-icon>done</mat-icon>
                 </button>
-                 <button class="button-deleted margin" mat-button  *ngIf="!newuser" (click) = "deletedUser()" >
+
+                 <button class="button-deleted margin" mat-button  *ngIf="!newtarea" (click) = "deletedTarea()" >
                     <mat-icon>close</mat-icon>
                   </button>
-                <button class="button margin" mat-button   *ngIf="!newuser  && formuser.valid && formuser.touched " (click) = "updatedUser()" >
+                 <button class="button margin" mat-button   *ngIf="!newtarea  && formTarea.valid && formTarea.touched " (click) = "updatedTarea()" >
                     <mat-icon>autorenew</mat-icon>
                   </button>
             </form>

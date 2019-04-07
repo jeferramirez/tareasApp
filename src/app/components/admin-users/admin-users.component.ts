@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { USUARIO } from '../../shared/interfaces/usuario.interface';
 import { User } from '../../shared/clases/usuario';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-admin-users',
@@ -14,7 +15,7 @@ import { User } from '../../shared/clases/usuario';
 export class AdminUsersComponent implements OnInit, AfterContentInit {
 
 
-  columnas = ['nombre', 'apellido', 'email', 'estado' , 'fechacreacion', ];
+  columnas = ['nombre', 'apellido', 'email' , 'fechacreacion', ];
   dataSource = new MatTableDataSource([]);
 
   @ViewChild('paginatorUser') paginatorUser: MatPaginator;
@@ -64,19 +65,30 @@ export class AdminUsersComponent implements OnInit, AfterContentInit {
    */
   newUser() {
 
-   this.usuarioTable = new User( '' , '' , '' , true, '');
+   this.usuarioTable = new User( '' , '' , '' , true, moment().format('L'));
    this.newuser = true;
    this._usuarioService.centerView('consultaruser');
+
   }
 
-  addUser() {
+  addUser(form) {
 
-   this.dataSource.data.push( this.usuarioTable );
+  const arreglo = this.dataSource.data;
+
+   arreglo.push( this.usuarioTable );
+   this.dataSource.data = arreglo;
+   this._usuarioService.alert('success', 'Almacenado con éxito' , 'todos los campos fueron almacenados');
+
+   this.usuarioTable = null;
+
+
   }
 
   updatedUser() {
 
   console.log( this.usuarioTable );
+  this._usuarioService.alert('info', 'Actualizado con éxito' , 'todos los campos fueron almacenados')
+
 
   }
 
@@ -87,10 +99,6 @@ export class AdminUsersComponent implements OnInit, AfterContentInit {
   }
 
 
-  prueba(form) {
-
-    console.log(form);
-  }
 }
 
 

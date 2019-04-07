@@ -19,8 +19,12 @@ import {MatListModule} from '@angular/material/list';
 import { UsuariosService } from './shared/services/usuarios.service';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatSelectModule} from '@angular/material/select';
 
 import {MatInputModule} from '@angular/material/input';
+import { TareasService } from './shared/services/tareas.service';
+import { RutasRoutingModule } from './rutas/rutas-routing.module';
+import { PrincipalComponent } from './components/principal/principal.component';
 
 
 
@@ -30,6 +34,7 @@ import {MatInputModule} from '@angular/material/input';
     AppComponent,
     AdminUsersComponent,
     AdminTareasComponent,
+    PrincipalComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,12 +51,15 @@ import {MatInputModule} from '@angular/material/input';
     MatListModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    RutasRoutingModule,
+    MatSelectModule
 
 
   ],
   providers: [
-    UsuariosService
+    UsuariosService,
+    TareasService
   ],
   bootstrap: [AppComponent]
 })

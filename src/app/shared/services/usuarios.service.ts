@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 @Injectable()
 export class UsuariosService {
@@ -49,7 +49,7 @@ export class UsuariosService {
 
 
 
-    ]
+    ];
   }
 
 
@@ -64,4 +64,14 @@ export class UsuariosService {
     }, 100);
   }
 
+
+  alert( tipo, titulo, text , timer?) {
+
+  return Swal.fire({
+      type: tipo,
+      title: titulo,
+      text: text,
+      timer: timer ? timer : 1500
+    });
+  }
 }

@@ -48,9 +48,9 @@
                   </ng-container> -->
 
                   <!-- Fecha de creacion Column -->
-                  <ng-container matColumnDef="fechacreacion" >
+                  <ng-container matColumnDef="fecha_creacion" >
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
-                      <mat-cell *matCellDef="let element"> {{element.fechacreacion}} </mat-cell>
+                      <mat-cell *matCellDef="let element"> {{element.fecha_creacion}} </mat-cell>
                     </ng-container>
 
                   <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
@@ -132,6 +132,10 @@
                           </mat-panel-description>
                         </mat-expansion-panel-header>
 
+                        <mat-list role="list">
+                      <mat-list-item role="listitem" *ngFor="let item of tareas"> {{item.descripcion}}</mat-list-item>
+
+                        </mat-list>
 
                       </mat-expansion-panel>
                     </mat-accordion>

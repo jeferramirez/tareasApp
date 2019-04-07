@@ -7,9 +7,9 @@ export class Tarea {
 
   descripcion: String;
   estado: Boolean;
-  fechacreacion: String;
-  fechaejecucion: String;
-  usuario_id: String;
+  fecha_creacion: String;
+  fecha_ejecucion: String;
+  usuario_id: number;
 
 
   constructor( descripcion, estado , fechacreacion, fechaejecucion,   usuario_id ) {
@@ -17,8 +17,8 @@ export class Tarea {
 
     this.descripcion = descripcion;
     this.estado = estado;
-    this.fechacreacion = fechacreacion;
-    this.fechaejecucion = fechaejecucion;
+    this.fecha_creacion = fechacreacion;
+    this.fecha_ejecucion = fechaejecucion;
     this.usuario_id = usuario_id;
 
 

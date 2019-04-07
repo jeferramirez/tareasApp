@@ -9,16 +9,16 @@ export class User {
   apellido: string;
   estado: boolean;
   email: string;
-  fechacreacion: string;
+  fecha_creacion: string;
 
-  constructor( nombre, apellido , email, estado, fechacreacion ) {
+  constructor( nombre, apellido , email, estado, fecha_creacion ) {
 
 
     this.nombre = nombre;
     this.email = email;
     this.estado = estado;
     this.apellido = apellido;
-    this.fechacreacion = fechacreacion;
+    this.fecha_creacion = fecha_creacion;
 
 
   }

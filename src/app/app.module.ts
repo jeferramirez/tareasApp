@@ -25,6 +25,7 @@ import {MatInputModule} from '@angular/material/input';
 import { TareasService } from './shared/services/tareas.service';
 import { RutasRoutingModule } from './rutas/rutas-routing.module';
 import { PrincipalComponent } from './components/principal/principal.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -53,7 +54,8 @@ import { PrincipalComponent } from './components/principal/principal.component';
     MatInputModule,
     MatSlideToggleModule,
     RutasRoutingModule,
-    MatSelectModule
+    MatSelectModule,
+    HttpClientModule
 
 
   ],

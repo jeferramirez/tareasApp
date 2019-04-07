@@ -1,58 +1,13 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class UsuariosService {
 
-  constructor() { }
-
-
-  getAll() {
-
-    return [
-
-     {
-       nombre: 'Juan',
-       apellido: 'Perez',
-       email: 'juan@mail.com',
-       estado: true,
-       fechacreacion: '2018-04-23'
-
-     },
-
-     {
-      nombre: 'Pedro',
-      apellido: 'torres',
-      email: 'pedro@mail.com',
-      estado: true,
-      fechacreacion: '2018-04-23'
-
-    },
-    {
-      nombre: 'Ivan',
-      apellido: 'ramirez',
-      email: 'ivan@mail.com',
-      estado: true,
-      fechacreacion: '2018-04-23'
-
-    },
-
-    {
-      nombre: 'Carlos',
-      apellido: 'Perez',
-      email: 'carlos@mail.com',
-      estado: true,
-      fechacreacion: '2018-04-23'
-
-    }
-
-
-
-
-    ];
-  }
-
-
+  constructor( private httpClient:  HttpClient, private router: Router ) { }
 
 
   centerView(id) {
@@ -74,4 +29,43 @@ export class UsuariosService {
       timer: timer ? timer : 1500
     });
   }
+
+
+  getAllUsers() {
+
+   return this.httpClient.get(`${environment.APIREST}/usuarios`);
+
+  }
+
+  postUser( usuario ) {
+
+    return this.httpClient.post(`${environment.APIREST}/usuarios`, usuario);
+
+  }
+
+
+  getOne(id: number) {
+
+    return this.httpClient.get(`${environment.APIREST}/usuarios/${id}`).toPromise();
+
+  }
+  deletedUser( id: number ) {
+
+
+    return this.httpClient.delete(`${environment.APIREST}/usuarios/${id}`);
+
+
+  }
+
+  updatedUser(usuario) {
+
+   return this.httpClient.put(`${environment.APIREST}/usuarios`, usuario);
+
+  }
+
+  refreshContent( ruta: string ) {
+    this.router.navigateByUrl('/', {skipLocationChange: true})
+    .then(() => this.router.navigate([`/${ruta}`]));
+  }
+
 }

@@ -1,13 +1,13 @@
 
 
 export  interface TAREA {
-id?: String;
+id?: number;
+usuario?: String;
 descripcion: String;
 estado: Boolean;
-fechacreacion: String;
-fechaejecucion: String;
-usuario?: String;
-usuario_id: String;
+fecha_creacion: String;
+fecha_ejecucion: String;
+usuario_id: number;
 
 
 

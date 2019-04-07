@@ -1,12 +1,12 @@
 
 
 export  interface USUARIO {
-id?: string;
+id?: number;
 nombre: String;
 apellido: String;
 email: String;
 estado: Boolean;
-fechacreacion: String;
+fecha_creacion: String;
 
 
 

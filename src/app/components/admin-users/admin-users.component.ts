@@ -6,6 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { USUARIO } from '../../shared/interfaces/usuario.interface';
 import { User } from '../../shared/clases/usuario';
 import * as moment from 'moment';
+import { TareasService } from '../../shared/services/tareas.service';
 
 @Component({
   selector: 'app-admin-users',
@@ -15,7 +16,7 @@ import * as moment from 'moment';
 export class AdminUsersComponent implements OnInit, AfterContentInit {
 
 
-  columnas = ['nombre', 'apellido', 'email' , 'fechacreacion', ];
+  columnas = ['nombre', 'apellido', 'email' , 'fecha_creacion', ];
   dataSource = new MatTableDataSource([]);
 
   @ViewChild('paginatorUser') paginatorUser: MatPaginator;
@@ -23,10 +24,19 @@ export class AdminUsersComponent implements OnInit, AfterContentInit {
 
   usuarioTable: USUARIO = null;
   newuser = false;
-  constructor( private _usuarioService: UsuariosService) { }
+
+  tareas = [];
+  constructor( private _usuarioService: UsuariosService,  private _tareaService: TareasService) { }
 
   ngOnInit() {
-    this.dataSource.data = this._usuarioService.getAll();
+
+    this._usuarioService.getAllUsers().subscribe( (res: Array <any>) => {
+
+      console.log(res);
+      this.dataSource.data = res;
+
+    }, err => console.log(err));
+
   }
 
   ngAfterContentInit() {
@@ -58,6 +68,15 @@ export class AdminUsersComponent implements OnInit, AfterContentInit {
     this.usuarioTable = row;
     this._usuarioService.centerView('consultaruser');
 
+
+     /* trae todas las tareas asociadas a un usuario*/
+    this._tareaService.getAllByUser(row.id)
+    .then( (res: any) => {
+
+      this.tareas = res;
+      console.log(res);
+    });
+
   }
 
   /**
@@ -65,7 +84,7 @@ export class AdminUsersComponent implements OnInit, AfterContentInit {
    */
   newUser() {
 
-   this.usuarioTable = new User( '' , '' , '' , true, moment().format('L'));
+   this.usuarioTable = new User( '' , '' , '' , true, moment().format('YYYY-MM-DD'));
    this.newuser = true;
    this._usuarioService.centerView('consultaruser');
 
@@ -73,13 +92,16 @@ export class AdminUsersComponent implements OnInit, AfterContentInit {
 
   addUser(form) {
 
-  const arreglo = this.dataSource.data;
 
-   arreglo.push( this.usuarioTable );
-   this.dataSource.data = arreglo;
-   this._usuarioService.alert('success', 'Almacenado con éxito' , 'todos los campos fueron almacenados');
+   this._usuarioService.postUser(this.usuarioTable)
+   .subscribe(res => {
 
-   this.usuarioTable = null;
+    console.log(res);
+    this._usuarioService.alert('success', 'Almacenado con éxito' , 'todos los campos fueron almacenados')
+    .then( () => this._usuarioService.refreshContent('adminusuarios') );
+
+   });
+
 
 
   }
@@ -87,7 +109,15 @@ export class AdminUsersComponent implements OnInit, AfterContentInit {
   updatedUser() {
 
   console.log( this.usuarioTable );
-  this._usuarioService.alert('info', 'Actualizado con éxito' , 'todos los campos fueron almacenados')
+
+  this._usuarioService.updatedUser(this.usuarioTable)
+  .subscribe( res => {
+
+    this._usuarioService.alert('info', 'Actualizado con éxito' , 'todos los campos fueron almacenados')
+    .then(() => this._usuarioService.refreshContent('adminusuarios') );
+
+
+  });
 
 
   }
@@ -96,6 +126,13 @@ export class AdminUsersComponent implements OnInit, AfterContentInit {
   deletedUser() {
 
     console.log( this.usuarioTable );
+
+    this._usuarioService.deletedUser(this.usuarioTable.id )
+    .subscribe( res => {
+
+      this._usuarioService.alert('info', 'Eliminado con éxito' , 'el usuario fue eliminado')
+      .then( () => this._usuarioService.refreshContent('adminusuarios') );
+    });
   }
 
 

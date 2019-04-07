@@ -14,7 +14,7 @@ import * as moment from 'moment';
 })
 export class AdminTareasComponent implements OnInit, AfterContentInit {
 
-  columnas = ['usuario', 'fechacreacion', 'fechaejecucion'  ];
+  columnas = ['usuario', 'fecha_creacion', 'fecha_ejecucion'  ];
   dataSource = new MatTableDataSource([]);
 
   @ViewChild('paginatorUser') paginatorUser: MatPaginator;
@@ -23,17 +23,34 @@ export class AdminTareasComponent implements OnInit, AfterContentInit {
   tareaTable: TAREA = null;
   newtarea = false;
 
-  users = [ {nombre: 'juan', id: '2'}, {nombre: 'carlos', id: '3'}];
+  users = [];
 
   constructor(private  _usuarioService: UsuariosService, private _tareaService: TareasService) { }
 
   ngOnInit() {
 
-    this.dataSource.data = this._tareaService.getAll();
+    this._tareaService.getAll().subscribe(( res: Array<any>) => {
+
+
+      res.forEach( element => {
+        this._usuarioService.getOne(element.usuario_id)
+        .then( user => {
+          console.log(user);
+          element['usuario'] = user['nombre'];
+        });
+      });
+
+      this.dataSource.data = res;
+
+    });
+
+    this._usuarioService.getAllUsers().subscribe( (res: Array <any>) => {
+
+     this.users = res;
+    }, err => console.log(err));
   }
 
   ngAfterContentInit() {
-
 
     this.dataSource.sort = this.sortUser;
 
@@ -70,32 +87,55 @@ export class AdminTareasComponent implements OnInit, AfterContentInit {
    */
   newTarea() {
 
-   this.tareaTable = new Tarea( '' , true, moment().format('L') , '' , '');
+   this.tareaTable = new Tarea( '' , true, moment().format('YYYY-MM-DD') , '' , 1);
    this.newtarea = true;
    this._usuarioService.centerView('consultarTarea');
   }
 
   addTarea() {
 
-   this.dataSource.data.push( this.tareaTable );
+     this._tareaService.postTarea(this.tareaTable)
+     .subscribe(res => {
+
+      console.log(res);
+      this._usuarioService.alert('success', 'Almacenado con éxito' , 'todos los campos fueron almacenados')
+      .then( () => this._usuarioService.refreshContent('admintareas') );
+
+     });
+
+    console.log(this.tareaTable);
   }
 
   updatedTarea() {
 
-  console.log( this.tareaTable );
+    this._tareaService.updatedTarea(this.tareaTable)
+    .subscribe( res => {
+
+      this._usuarioService.alert('info', 'Actualizada con éxito' , 'la tarea fue actualizada')
+      .then( () => this._usuarioService.refreshContent('admintareas') );
+    });
 
   }
 
 
   deletedTarea() {
 
-    console.log( this.tareaTable );
+    this._tareaService.deletedTarea(this.tareaTable.id )
+    .subscribe( res => {
+
+      this._usuarioService.alert('info', 'Eliminado con éxito' , 'la tarea fue eliminada')
+      .then( () => this._usuarioService.refreshContent('admintareas') );
+    });
   }
 
 
   prueba(form) {
 
     console.log(form);
+  }
+
+  setUser(value) {
+    this.tareaTable.usuario_id = value;
   }
 
 }

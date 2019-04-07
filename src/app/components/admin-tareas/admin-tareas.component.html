@@ -30,15 +30,15 @@
                   </ng-container>
 
                   <!-- fecha c  Column -->
-                  <ng-container matColumnDef="fechacreacion">
+                  <ng-container matColumnDef="fecha_creacion">
                     <mat-header-cell *matHeaderCellDef mat-sort-header > Fecha creación </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.fechacreacion}} </mat-cell>
+                    <mat-cell *matCellDef="let element"> {{element.fecha_creacion}} </mat-cell>
                   </ng-container>
 
                   <!-- fecha e Column -->
-                  <ng-container matColumnDef="fechaejecucion">
+                  <ng-container matColumnDef="fecha_ejecucion">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha ejecucion </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.fechaejecucion}} </mat-cell>
+                    <mat-cell *matCellDef="let element"> {{element.fecha_ejecucion}} </mat-cell>
                   </ng-container>
 
                   <!-- estado Column -->
@@ -87,7 +87,7 @@
 
               <div class="col-md-6" *ngIf="newtarea">
                 <mat-form-field>
-                    <mat-select placeholder="Usuario" required>
+                    <mat-select  (selectionChange)="setUser($event.value)" placeholder="Usuario" required>
                       <mat-option *ngFor="let item of users" [value]="item.id">
                         {{ item.nombre }}
                       </mat-option>
@@ -106,13 +106,13 @@
           <div class="row" >
             <div class="col-md-6" *ngIf="!newtarea" >
               <mat-form-field class="example-full-width">
-                <input matInput  name="fechacreacion" type="date" placeholder="Fecha de creacion" [(ngModel)]="tareaTable.fechacreacion">
+                <input matInput  name="fechacreacion" type="date" placeholder="Fecha de creacion" [(ngModel)]="tareaTable.fecha_creacion" [disabled] = "!newtarea">
               </mat-form-field>
             </div>
 
             <div class="col-md-6">
                 <mat-form-field class="example-full-width">
-                  <input matInput name="fechaejecucion" type="date" placeholder="Fecha de ejecucion" [(ngModel)]="tareaTable.fechaejecucion" required >
+                  <input matInput name="fechaejecucion" type="date" placeholder="Fecha de ejecucion" [(ngModel)]="tareaTable.fecha_ejecucion" required >
                 </mat-form-field>
             </div>
            </div>
